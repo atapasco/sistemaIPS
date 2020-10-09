@@ -43,13 +43,13 @@ namespace BLL
                 {
                     
                     buscarPersona.Verificacion = false;
-                    buscarPersona.nombre = liquidacion.NombrePaciente;
+                    buscarPersona.liquidacion = liquidacion;
 
                     return buscarPersona;
                 }
             }
             buscarPersona.Verificacion = true;
-            buscarPersona.nombre = null;
+            buscarPersona.liquidacion = null;
 
             return buscarPersona;
         }
@@ -95,6 +95,18 @@ namespace BLL
             return liquidacion.CostoLiquidacion;
         }
 
+        public String EliminarLiquidacion(int numeroLiquidacion)
+        {
+            try
+            {
+                return liquidacionCuotaModeradoraRepository.EliminarLiquidacion(numeroLiquidacion);
+            }
+            catch(Exception e)
+            {
+                return $"Error: {e}";
+            }
+        }
+
         public class BuscarPersona
         {
             public BuscarPersona()
@@ -102,7 +114,7 @@ namespace BLL
             }
 
             public bool Verificacion { set; get; }
-            public String nombre { set; get; }
+            public LiquidacionCuotaModeradora liquidacion { set; get; }
         }
     }
 }

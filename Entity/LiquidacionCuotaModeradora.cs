@@ -17,6 +17,7 @@ namespace Entity
             ValorServicio = valorServicio;
             TipoDeAfiliacion = tipoAfiliacion;
             SalarioPaciente = salarioPaciente;
+            NumeroLiquidacion = 0;
             Fecha = fecha.ToShortDateString();
         }
         public LiquidacionCuotaModeradora()

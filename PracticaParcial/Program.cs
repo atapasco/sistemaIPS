@@ -32,7 +32,7 @@ namespace PracticaParcial
             Console.WriteLine("4. Salir");
             opcion = Convert.ToChar(Console.ReadLine());
 
-            switch(opcion){
+            switch (opcion) {
                 case '1':
                     Console.Write("Numero identificacion: ");
                     identificacion = Console.ReadLine();
@@ -52,25 +52,23 @@ namespace PracticaParcial
                         Console.Write(liquidacionCuotaModeradoraService.Guardar(liquidacion));
                     } else
                     {
-                        nombre = liquidacionCuotaModeradoraService.Buscar(identificacion).nombre;
-                        Console.WriteLine($"nombre: {nombre}");
-                        Console.Write("Tipo de afiliacion: ");
-                        tipoDeAfilacion = Console.ReadLine();
-                        Console.Write("Salario paciente: ");
-                        salarioPaciente = Convert.ToDouble(Console.ReadLine());
+                        liquidacion = liquidacionCuotaModeradoraService.Buscar(identificacion).liquidacion;
+                        Console.WriteLine($"nombre: {liquidacion.NombrePaciente}");
+                        Console.WriteLine($"Tipo de afiliacion: {liquidacion.TipoDeAfiliacion}");
+                        Console.WriteLine($"Salario paciente: {liquidacion.SalarioPaciente}");
                         Console.Write("Costo del servicio: ");
                         valorServicio = Convert.ToDouble(Console.ReadLine());
-                        liquidacion = new LiquidacionCuotaModeradora(nombre, tipoDeAfilacion, salarioPaciente, valorServicio);
+                        liquidacion.ValorServicio = valorServicio;
                         liquidacion.NumeroId = identificacion;
                         Console.Write(liquidacionCuotaModeradoraService.Guardar(liquidacion));
                     }
-                    
+
 
                     break;
 
                 case '2':
                     List<LiquidacionCuotaModeradora> liquidaciones = liquidacionCuotaModeradoraService.ConsultaTotal();
-                    foreach(var item in liquidaciones)
+                    foreach (var item in liquidaciones)
                     {
                         Console.WriteLine($"Numero de identificaicon: {item.NumeroId}");
                         Console.WriteLine($"Nombre paciente: {item.NombrePaciente}");
@@ -84,6 +82,10 @@ namespace PracticaParcial
                     break;
 
                 case '3':
+                    int numeroLiquidacion = 0;
+                    Console.Write("Digite el numero de liquidacion que desea eliminar: ");
+                    numeroLiquidacion = Convert.ToInt32(Console.ReadLine());
+                    Console.Write(liquidacionCuotaModeradoraService.EliminarLiquidacion(numeroLiquidacion));
                     break;
 
                 case '4':

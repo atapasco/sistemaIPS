@@ -13,7 +13,7 @@ namespace DAL
         public void Guardar(LiquidacionCuotaModeradora persona)
         {
             TextWriter escribirArchivo;
-            persona.NumeroLiquidacion = NumeroDeLiquidacion() + 1;
+            persona.NumeroLiquidacion = NumeroDeLiquidacion();
             FileStream file = new FileStream("DatosLiquidacion.txt", FileMode.Append);
             escribirArchivo = new StreamWriter(file);
             escribirArchivo.WriteLine($"{persona.NumeroId};{persona.NombrePaciente};{persona.SalarioPaciente};" +
@@ -40,17 +40,14 @@ namespace DAL
 
         public int NumeroDeLiquidacion()
         {
-            int i = 0;
-            FileStream file = new FileStream("DatosLiquidacion.txt", FileMode.OpenOrCreate, FileAccess.Read);
-            StreamReader reader = new StreamReader(file);
-            string linea = string.Empty;
-            while ((linea = reader.ReadLine()) != null)
+            List<LiquidacionCuotaModeradora> liquidaciones = new List<LiquidacionCuotaModeradora>();
+            liquidaciones = ConsultaGeneral();
+            int numeroDeLiquidacion = 0;
+            foreach(var liquidacion in liquidaciones)
             {
-                i++;
+                numeroDeLiquidacion = liquidacion.NumeroLiquidacion;
             }
-            reader.Close();
-            file.Close();
-            return i;
+            return numeroDeLiquidacion + 1;
         }
 
         public LiquidacionCuotaModeradora Organizador(String linea)
@@ -67,6 +64,31 @@ namespace DAL
             liquidacion.ValorServicio = Convert.ToDouble(matrizPersona[7]);
 
             return liquidacion;
+        }
+
+        public String EliminarLiquidacion(int numeroDeLiquidacion)
+        {
+            List<LiquidacionCuotaModeradora> liquidaciones = new List<LiquidacionCuotaModeradora>();
+            liquidaciones = ConsultaGeneral();
+            FileStream file = new FileStream("DatosLiquidacion.txt", FileMode.Create);
+            file.Close();
+            foreach (var liquidacion in liquidaciones)
+            {
+                if (numeroDeLiquidacion != liquidacion.NumeroLiquidacion)
+                {
+                    Guardar(liquidacion);
+                }
+            }
+
+            foreach (var liquidacion in liquidaciones)
+            {
+                if (numeroDeLiquidacion == liquidacion.NumeroLiquidacion)
+                {
+                    return "Liquidacion Eliminada";
+                }
+            }
+
+            return "Error numero de liquidacion no encontrado, por favor intente nuevamente";
         }
     }
 }
